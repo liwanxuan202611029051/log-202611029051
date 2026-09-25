@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ 零基础入门教程</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%233b82f6'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle' fill='white' font-family='monospace' font-weight='bold'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f8f9fb;--sbg:#1e293b;--stext:#cbd5e1;--sactive:#3b82f6;--text:#1e293b;--tl:#64748b;--cbg:#0f172a;--ctext:#e2e8f0;--accent:#3b82f6;--alight:#dbeafe;--tipbg:#f0f9ff;--tipb:#0ea5e9;--warnbg:#fffbeb;--warnb:#f59e0b;--obg:#1a1a2e;--otext:#a5f3fc;--border:#e2e8f0;--r:8px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:280px;background:var(--sbg);color:var(--stext);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;padding:24px 0;z-index:100;transition:transform .3s}
+.sidebar-title{padding:0 24px 20px;font-size:18px;font-weight:700;color:#fff;border-bottom:1px solid #334155;margin-bottom:12px}
+.sidebar-title small{display:block;font-size:12px;font-weight:400;color:#94a3b8;margin-top:4px}
+.nst{padding:14px 24px 6px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#64748b;font-weight:600}
+.ni{display:block;padding:8px 24px 8px 32px;color:var(--stext);text-decoration:none;font-size:14px;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.ni:hover{background:#334155;color:#fff}
+.ni.active{background:#1e3a5f;color:#fff;border-left-color:var(--sactive)}
+.ni .num{display:inline-block;width:24px;color:#64748b;font-size:12px}
+.ni.active .num{color:var(--sactive)}
+.main{flex:1;margin-left:280px;padding:40px 48px 80px;max-width:900px}
+.menu-toggle{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--sbg);color:#fff;border:none;padding:10px 14px;border-radius:6px;cursor:pointer;font-size:14px}
+.chapter{display:none}
+.chapter.active{display:block}
+.chapter h1{font-size:30px;font-weight:800;margin-bottom:8px}
+.chapter .sub{font-size:15px;color:var(--tl);margin-bottom:32px}
+.chapter h2{font-size:21px;font-weight:700;margin:36px 0 16px;padding-left:12px;border-left:4px solid var(--accent)}
+.chapter h3{font-size:17px;font-weight:600;margin:24px 0 12px}
+.chapter p{margin-bottom:14px;font-size:15px}
+.chapter ul,.chapter ol{margin:12px 0 16px 24px}
+.chapter li{margin-bottom:6px;font-size:15px}
+.cb{background:var(--cbg);border-radius:var(--r);margin:16px 0 20px;overflow:hidden}
+.ch{background:#1e293b;padding:8px 16px;font-size:12px;color:#94a3b8;display:flex;justify-content:space-between}
+.ch .lang{color:#60a5fa;font-weight:600}
+.cbd{padding:16px;overflow-x:auto;font-family:"JetBrains Mono",Consolas,monospace;font-size:14px;line-height:1.7;color:var(--ctext)}
+.cbd .l{display:block;white-space:pre}
+.kw{color:#c084fc}.ty{color:#60a5fa}.st{color:#86efac}.cm{color:#64748b;font-style:italic}.nm{color:#fbbf24}.fn{color:#67e8f9}.pp{color:#fb923c}
+.bd{margin:16px 0 24px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.bd-t{background:var(--alight);padding:10px 16px;font-weight:600;font-size:14px;color:#1e40af}
+.bd table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+.bd th,.bd td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;word-wrap:break-word}
+.bd th{background:#f1f5f9;font-weight:600;font-size:13px}
+.bd code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:"JetBrains Mono",Consolas,monospace;font-size:13px;color:#be185d}
+.ob{background:var(--obg);border-radius:var(--r);margin:16px 0 24px;overflow:hidden}
+.ob-h{background:#0f0f23;padding:8px 16px;font-size:12px;color:#94a3b8}
+.ob-b{padding:16px;font-family:"JetBrains Mono",Consolas,monospace;font-size:14px;color:var(--otext);white-space:pre-wrap;line-height:1.7}
+.tip,.warn{padding:14px 18px;border-radius:var(--r);margin:16px 0 20px;font-size:14px}
+.tip{background:var(--tipbg);border-left:4px solid var(--tipb)}
+.warn{background:var(--warnbg);border-left:4px solid var(--warnb)}
+.tip strong,.warn strong{display:block;margin-bottom:4px}
+.ic{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:"JetBrains Mono",Consolas,monospace;font-size:13px;color:#be185d}
+.nb{display:flex;justify-content:space-between;margin-top:48px;padding-top:24px;border-top:1px solid var(--border)}
+.nbtn{padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;text-decoration:none}
+.nbtn:hover{background:#2563eb}
+.nbtn.sec{background:#e2e8f0;color:var(--text)}
+.nbtn.sec:hover{background:#cbd5e1}
+.hero{background:linear-gradient(135deg,#1e3a5f,#0f172a);color:#fff;padding:48px 40px;border-radius:12px;margin-bottom:40px}
+.hero h1{color:#fff;font-size:32px;margin-bottom:12px}
+.hero p{color:#94a3b8;font-size:15px}
+.pb{background:#334155;height:8px;border-radius:4px;margin-top:20px;overflow:hidden}
+.pf{height:100%;background:var(--accent);width:0%;transition:width .3s;border-radius:4px}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;cursor:pointer;transition:all .15s}
+.card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(59,130,246,.15);transform:translateY(-2px)}
+.card .cn{display:inline-block;background:var(--alight);color:#1e40af;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;margin-bottom:8px}
+.card h3{font-size:15px;margin:0 0 6px}
+.card p{font-size:13px;color:var(--tl);margin:0}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:60px 20px 60px}.menu-toggle{display:block}.hero{padding:32px 24px}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ 菜单</button>
+<div class="layout">
+<nav class="sidebar" id="sidebar"></nav>
+<main class="main" id="main"></main>
+</div>
+<script>
+const chapters=[
+{id:'home',num:'',title:'首页',sec:'开始'},
+{id:'c01',num:'01',title:'什么是程序和编程',sec:'入门'},
+{id:'c02',num:'02',title:'第一个程序 Hello World',sec:'入门'},
+{id:'c03',num:'03',title:'注释怎么写',sec:'入门'},
+{id:'c04',num:'04',title:'变量与数据类型',sec:'基础'},
+{id:'c05',num:'05',title:'变量命名规则',sec:'基础'},
+{id:'c06',num:'06',title:'常量与 const',sec:'基础'},
+{id:'c07',num:'07',title:'输入输出 cin/cout',sec:'基础'},
+{id:'c08',num:'08',title:'运算符',sec:'基础'},
+{id:'c09',num:'09',title:'类型转换',sec:'基础'},
+{id:'c10',num:'10',title:'分支 if/switch',sec:'控制流'},
+{id:'c11',num:'11',title:'循环结构',sec:'控制流'},
+{id:'c12',num:'12',title:'数组',sec:'进阶'},
+{id:'c13',num:'13',title:'函数',sec:'进阶'},
+{id:'c14',num:'14',title:'指针入门',sec:'进阶'},
+{id:'c15',num:'15',title:'字符串基础',sec:'进阶'},
+{id:'c16',num:'16',title:'常见错误与调试',sec:'进阶'},
+];
+
+function renderSidebar(){
+let h='<div class="sidebar-title">C++ 零基础入门<small>从 Hello World 开始学编程</small></div>';
+let ls='';
+chapters.forEach(c=>{
+if(c.sec!==ls){h+=`<div class="nst">${c.sec}</div>`;ls=c.sec}
+h+=`<a class="ni" data-id="${c.id}">${c.num?`<span class="num">${c.num}</span>`:''}${c.title}</a>`;
+});
+document.getElementById('sidebar').innerHTML=h;
+document.querySelectorAll('.ni').forEach(el=>el.onclick=()=>show(el.dataset.id));
+}
+
+function show(id){
+document.querySelectorAll('.ni').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
+document.querySelectorAll('.chapter').forEach(el=>el.classList.remove('active'));
+const el=document.getElementById('ch-'+id);
+if(el){el.classList.add('active');window.scrollTo(0,0)}
+try{localStorage.setItem('cpp-progress',id)}catch(e){}
+document.querySelector('.sidebar').classList.remove('open');
+}
+
+function renderNav(id){
+const idx=chapters.findIndex(c=>c.id===id);
+let prev=idx>0?chapters[idx-1]:null;
+let next=idx<chapters.length-1?chapters[idx+1]:null;
+return `<div class="nb">
+${prev?`<button class="nbtn sec" onclick="show('${prev.id}')">← ${prev.title}</button>`:'<span></span>'}
+${next?`<button class="nbtn" onclick="show('${next.id}')">${next.title} →</button>`:'<span></span>'}
+</div>`;
+}
+
+function code(lines){return lines.map(l=>`<span class="l">${l}</span>`).join('')}
+
+// ===== 各章节 HTML =====
+const HTML={};
+
+// 首页
+HTML.home=`
+<div class="hero">
+<h1>欢迎来到 C++ 零基础入门教程</h1>
+<p>专为计算机零基础的大一新生设计，从"什么是程序"开始，一步一步带你学会 C++ 编程。每一行代码、每一个符号都会讲清楚。</p>
+<div class="pb"><div class="pf" id="progressFill"></div></div>
+</div>
+<h2>学习目录</h2>
+<p>建议从第 01 章开始按顺序学，不要跳着看。左边的目录可以随时切换章节。</p>
+<div class="cg">
+${chapters.filter(c=>c.id!=='home').map(c=>`
+<div class="card" onclick="show('${c.id}')">
+<span class="cn">第 ${c.num} 章</span>
+<h3>${c.title}</h3>
+<p>${c.sec} 部分</p>
+</div>`).join('')}
+</div>
+`;
+
+// 01 什么是程序和编程
+HTML.c01=`
+<h1>01 什么是程序和编程</h1>
+<div class="sub">先搞懂：我们到底在学什么？</div>
+
+<h2>1.1 什么是程序？</h2>
+<p>你可以把程序理解成一份<strong>给电脑看的菜谱</strong>。</p>
+<p>菜谱上写着：先放油，油热了放鸡蛋，再放盐，翻炒几下出锅。电脑就是一个"照做"的厨师，你写得越详细，它做得越准确。</p>
+<p>程序（Program）就是<strong>一系列让电脑按照顺序执行的指令集合</strong>。你平时用的微信、浏览器、游戏，都是一个个程序。</p>
+
+<h2>1.2 什么是编程？</h2>
+<p>编程（Programming）就是<strong>写程序</strong>——用人能看懂的文字（编程语言）告诉电脑该做什么。</p>
+<p>但是电脑只认识 0 和 1（机器语言），人直接写 010101 太痛苦了。所以人们发明了 C++、Python 这些<strong>编程语言</strong>，它们更接近人类语言，写完后会自动翻译成电脑能懂的 0 和 1。</p>
+
+<h2>1.3 C++ 是什么？</h2>
+<p>C++ 是一门非常经典的编程语言，由 Bjarne Stroustrup 在 1980 年代在 C 语言基础上扩展而来。它的特点是：</p>
+<ul>
+<li><strong>效率高</strong>：运行速度快，是游戏引擎、操作系统、高性能软件的首选</li>
+<li><strong>语法严格</strong>：对新手要求高，但能帮你养成好的编程习惯</li>
+<li><strong>用途广</strong>：学了 C++ 再学 Python、Java 等会非常轻松</li>
+</ul>
+<div class="tip"><strong>小贴士</strong>
+你是数据科学与大数据技术专业，C++ 是很多学校第一门编程课。学完它，你会理解"程序是怎么运行的"这个核心概念。</div>
+
+<h2>1.4 程序是怎么跑起来的？</h2>
+<p>简单分三步：</p>
+<ol>
+<li><strong>写代码</strong>：在编辑器里写 .cpp 文件（就是你写的 C++ 代码）</li>
+<li><strong>编译</strong>：编译器把你的代码翻译成电脑能懂的可执行文件（.exe）</li>
+<li><strong>运行</strong>：双击运行 .exe，程序就开始工作了</li>
+</ol>
+<div class="warn"><strong>注意</strong>
+C++ 是"编译型语言"，写完代码必须先编译成可执行文件才能运行。这和网页那种"写了直接看"的语言不一样。</div>
+
+<h2>1.5 你需要准备什么？</h2>
+<p>在正式写代码前，你需要一个<strong>编译器</strong>。常见选择：</p>
+<ul>
+<li><strong>Dev-C++</strong>：轻量、适合新手，学校机房常用</li>
+<li><strong>Visual Studio</strong>：微软出品，功能强大，Windows 上用</li>
+<li><strong>VS Code + 插件</strong>：免费、跨平台</li>
+</ul>
+<p>这个教程里的代码你都可以直接复制到你的编译器里运行。</p>
+${renderNav('c01')}
+`;
+
+// 02 Hello World
+HTML.c02=`
+<h1>02 第一个程序 Hello World</h1>
+<div class="sub">每个程序员的第一行代码</div>
+
+<p>学任何编程语言，第一个程序都是在屏幕上打印 <code class="ic">Hello World</code>。我们来看完整代码：</p>
+
+<div class="cb">
+<div class="ch"><span>hello.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'<span class="pp">#include</span> <span class="st">&lt;iostream&gt;</span>',
+'',
+'<span class="kw">using namespace</span> <span class="ty">std</span>;',
+'',
+'<span class="ty">int</span> <span class="fn">main</span>() {',
+'    <span class="ty">cout</span> &lt;&lt; <span class="st">"Hello World"</span> &lt;&lt; <span class="ty">endl</span>;',
+'    <span class="kw">return</span> <span class="num">0</span>;',
+'}',
+])}</div>
+</div>
+
+<p>运行结果：</p>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">Hello World</div></div>
+
+<p>现在我们一行一行拆开，看每个部分是什么意思。</p>
+
+<h2>2.1 逐行拆解</h2>
+
+<div class="bd">
+<div class="bd-t">逐行解释</div>
+<table>
+<colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+<tr><th>代码</th><th>是什么意思</th></tr>
+<tr><td><code>#include &lt;iostream&gt;</code></td><td><strong>引入头文件</strong>。<code>#include</code> 是一个"预处理指令"，意思是"把后面那个文件的内容复制粘贴到这里"。<code>iostream</code> 是 Input/Output Stream（输入输出流）的缩写，有了它你才能用 <code>cout</code> 做屏幕输出。<code>&lt;&gt;</code> 表示这是 C++ 标准库里的文件。</td></tr>
+<tr><td><code>using namespace std;</code></td><td><strong>使用标准命名空间</strong>。C++ 标准库里的东西都放在一个叫 <code>std</code>（standard）的"房间"里。如果不写这行，你每次用 <code>cout</code> 都得写成 <code>std::cout</code>。写了这行就可以简写。新手阶段直接照抄这行就行。</td></tr>
+<tr><td><code>int main() {</code></td><td><strong>主函数开始</strong>。每个 C++ 程序有且只有一个 <code>main</code> 函数，程序从 <code>main</code> 的第一行开始执行。<code>int</code> 表示这个函数最后会返回一个整数（return 0）。<code>()</code> 里留空表示不需要参数。<code>{</code> 表示函数体开始。</td></tr>
+<tr><td><code>cout &lt;&lt; "Hello World" &lt;&lt; endl;</code></td><td><strong>输出一句话到屏幕</strong>。<code>cout</code> 是 character output（字符输出）的意思，相当于一个"输出设备"。<code>&lt;&lt;</code> 叫"插入运算符"，意思是"把右边的内容送到左边的 cout 去显示"。<code>"Hello World"</code> 是字符串（用双引号包起来的文字）。<code>endl</code> 是 end line（换行）的意思，输出完换一行。<strong>结尾必须有分号 <code>;</code></strong>，表示这条语句结束。</td></tr>
+<tr><td><code>return 0;</code></td><td><strong>函数结束，返回 0</strong>。<code>return</code> 表示从函数返回，<code>0</code> 是返回给操作系统的数字，0 表示"程序正常结束"。</td></tr>
+<tr><td><code>}</code></td><td><strong>主函数结束</strong>。和前面的 <code>{</code> 配对。</td></tr>
+</table>
+</div>
+
+<h2>2.2 每个符号的意义</h2>
+<div class="bd">
+<div class="bd-t">符号对照表</div>
+<table>
+<colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+<tr><th>符号</th><th>名字和作用</th></tr>
+<tr><td><code>#</code></td><td>井号。开头表示这是"预处理指令"，在编译前先处理</td></tr>
+<tr><td><code>&lt; &gt;</code></td><td>尖括号。用来包头文件名，如 <code>&lt;iostream&gt;</code></td></tr>
+<tr><td><code>()</code></td><td>小括号。函数名后面必须跟小括号，如 <code>main()</code></td></tr>
+<tr><td><code>{ }</code></td><td>花括号。表示代码块的开始和结束，必须成对出现</td></tr>
+<tr><td><code>;</code></td><td>分号。每条语句结束必须加分号，就像中文的句号</td></tr>
+<tr><td><code>&lt;&lt;</code></td><td>输出运算符（两个小于号）。把右边内容输出到 cout</td></tr>
+<tr><td><code>" "</code></td><td>双引号。包起来的是"字符串"（文字内容）</td></tr>
+<tr><td><code>:</code></td><td>冒号。<code>namespace std</code> 里的冒号表示"在...里面"</td></tr>
+</table>
+</div>
+
+<div class="tip"><strong>新手最容易犯的错</strong>
+<ul>
+<li>忘记在语句末尾写分号 <code>;</code> —— 编译器会报错</li>
+<li>把 <code>&lt;&lt;</code> 写成 <code>&gt;&gt;</code> —— 输出要用 <code>&lt;&lt;</code>，输入才用 <code>&gt;&gt;</code></li>
+<li>花括号 <code>{ }</code> 不配对 —— 少一个多一个都会报错</li>
+<li>引号用成中文引号 <code>""</code> —— 必须用英文引号 <code>""</code></li>
+</ul>
+</div>
+
+<h2>2.3 改一改试试</h2>
+<p>把上面的代码改成你自己的内容，比如输出你的名字：</p>
+<div class="cb">
+<div class="ch"><span>我的第一个程序.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    cout &lt;&lt; "你好！我叫小明" &lt;&lt; endl;',
+'    cout &lt;&lt; "我正在学 C++" &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">你好！我叫小明
+我正在学 C++</div></div>
+<p>注意：每一行 cout 都会输出一行内容，<code>endl</code> 负责换行。你也可以用 <code>cout &lt;&lt; "\n";</code> 来换行，效果一样。</p>
+${renderNav('c02')}
+`;
+
+// 03 注释
+HTML.c03=`
+<h1>03 注释怎么写</h1>
+<div class="sub">写给人看的话，电脑会忽略</div>
+
+<p><strong>注释</strong>是写在代码里给人看的说明文字。编译器会完全忽略注释，不会执行它们。注释的作用是：让你自己和别人以后看代码时能看懂。</p>
+
+<h2>3.1 单行注释：//</h2>
+<p>用两个斜杠 <code>//</code>，从 <code>//</code> 开始到这一行结尾都是注释。</p>
+<div class="cb">
+<div class="ch"><span>注释示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    // 这是单行注释，下面这行代码会输出一句话',
+'    cout &lt;&lt; "你好" &lt;&lt; endl;  // 这行也可以写注释',
+'    // cout &lt;&lt; "这行被注释掉了，不会运行";',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="tip"><strong>技巧</strong>
+把一行代码前面加上 <code>//</code>，可以临时让这行"不运行"，调试的时候非常有用。</div>
+
+<h2>3.2 多行注释：/* */</h2>
+<p>如果要注释很多行，用 <code>/*</code> 开头，<code>*/</code> 结尾，中间的所有内容都是注释。</p>
+<div class="cb">
+<div class="ch"><span>多行注释.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'/*',
+'   这是多行注释',
+'   可以写很多行',
+'   比如：作者：小明',
+'   日期：2026年9月',
+'   功能：第一个程序',
+'*/',
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    cout &lt;&lt; "多行注释示例" &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+
+<h2>3.3 注释应该写什么？</h2>
+<ul>
+<li><strong>为什么这样做</strong>（思路），而不是"这行代码做了什么"（代码本身已经写了）</li>
+<li>复杂的算法或逻辑要注释</li>
+<li>函数开头可以写这个函数是干什么的</li>
+<li>不要写废话，比如 <code>// 把a加1</code> 这种没必要</li>
+</ul>
+<div class="warn"><strong>注意</strong>
+多行注释不能嵌套！<code>/* 里面再写 /* */</code> 会报错。新手尽量用单行注释 <code>//</code> 更安全。</div>
+${renderNav('c03')}
+`;
+
+// 04 变量与数据类型
+HTML.c04=`
+<h1>04 变量与数据类型</h1>
+<div class="sub">程序怎么存数据？</div>
+
+<h2>4.1 什么是变量？</h2>
+<p><strong>变量</strong>就像一个"盒子"，你可以在里面放东西，也可以随时换里面的东西。每个盒子有个名字（变量名），里面的东西可以随时改变。</p>
+<p>比如你要存一个人的年龄，就可以定义一个叫 <code>age</code> 的变量，把 <code>18</code> 放进去。</p>
+
+<h2>4.2 怎么定义变量？</h2>
+<p>语法：<code class="ic">数据类型 变量名 = 初始值;</code></p>
+<p>意思是：先告诉电脑这个盒子放什么类型的东西，然后给盒子起个名字，（可选）一开始放个初始值。</p>
+<div class="cb">
+<div class="ch"><span>变量示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    int age = 18;           // 整数类型，叫age，初始值18',
+'    double height = 1.75;   // 小数类型，叫height，初始值1.75',
+'    char grade = \'A\';     // 字符类型，叫grade，初始值A',
+'    bool isStudent = true;   // 布尔类型，叫isStudent，初始值真',
+'',
+'    cout &lt;&lt; "年龄：" &lt;&lt; age &lt;&lt; endl;',
+'    cout &lt;&lt; "身高：" &lt;&lt; height &lt;&lt; endl;',
+'    cout &lt;&lt; "成绩等级：" &lt;&lt; grade &lt;&lt; endl;',
+'    cout &lt;&lt; "是学生吗：" &lt;&lt; isStudent &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">年龄：18
+身高：1.75
+成绩等级：A
+是学生吗：1</div></div>
+<div class="tip"><strong>注意</strong>
+<code>bool</code> 类型输出时，<code>true</code> 会显示成 <code>1</code>，<code>false</code> 会显示成 <code>0</code>。</div>
+
+<h2>4.3 基本数据类型</h2>
+<div class="bd">
+<div class="bd-t">常用数据类型对照表</div>
+<table>
+<colgroup><col style="width:18%"><col style="width:22%"><col style="width:30%"><col style="width:30%"></colgroup>
+<tr><th>类型</th><th>名字</th><th>能存什么</th><th>例子</th></tr>
+<tr><td><code>int</code></td><td>整数</td><td>没有小数点的整数（正负都行）</td><td>0, 1, -5, 100, 9999</td></tr>
+<tr><td><code>double</code></td><td>双精度小数</td><td>带小数点的数，精度高</td><td>3.14, -0.5, 1.0</td></tr>
+<tr><td><code>float</code></td><td>单精度小数</td><td>带小数点的数，精度较低</td><td>3.14f, 1.5f</td></tr>
+<tr><td><code>char</code></td><td>单个字符</td><td>一个字母、数字或符号（用单引号）</td><td>'A', 'b', '5', '?'</td></tr>
+<tr><td><code>bool</code></td><td>布尔</td><td>只有两个值：true（真）或 false（假）</td><td>true, false</td></tr>
+<tr><td><code>string</code></td><td>字符串</td><td>一串文字（需要引入头文件）</td><td>"你好", "Hello"</td></tr>
+</table>
+</div>
+
+<h2>4.4 变量可以重新赋值</h2>
+<p>变量的意思就是"可以变"。你可以随时把新的值放进去。</p>
+<div class="cb">
+<div class="ch"><span>修改变量.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int age = 18;',
+'cout &lt;&lt; age &lt;&lt; endl;  // 输出 18',
+'',
+'age = 19;              // 重新赋值，不需要再写 int',
+'cout &lt;&lt; age &lt;&lt; endl;  // 输出 19',
+'',
+'age = age + 1;         // 在原来基础上加1',
+'cout &lt;&lt; age &lt;&lt; endl;  // 输出 20',
+])}</div>
+</div>
+<div class="warn"><strong>注意</strong>
+重新赋值的时候<strong>不要重复写数据类型</strong>！写过 <code>int age = 18;</code> 之后，后面直接写 <code>age = 19;</code> 就行。重复写 <code>int age = 19;</code> 会报错（重复定义）。</div>
+
+<h2>4.5 定义变量的几种方式</h2>
+<div class="cb">
+<div class="ch"><span>定义方式.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'// 方式1：定义时直接给初始值（推荐）',
+'int a = 10;',
+'',
+'// 方式2：先定义，后面再赋值',
+'int b;',
+'b = 20;',
+'',
+'// 方式3：一行定义多个同类型变量',
+'int x = 1, y = 2, z = 3;',
+'',
+'// 方式4：C++11 新写法（用大括号）',
+'int n{100};   // 等价于 int n = 100;',
+])}</div>
+</div>
+${renderNav('c04')}
+`;
+
+// 05 命名规则
+HTML.c05=`
+<h1>05 变量命名规则</h1>
+<div class="sub">起名字也有讲究</div>
+
+<h2>5.1 合法的命名规则</h2>
+<p>给变量起名字不是随便起的，必须遵守以下规则：</p>
+<ol>
+<li><strong>只能用字母、数字、下划线（_）</strong>三种字符</li>
+<li><strong>不能以数字开头</strong></li>
+<li><strong>不能用 C++ 关键字</strong>（比如 int、if、for 这些已经有特殊含义的词）</li>
+<li><strong>区分大小写</strong>：<code>age</code> 和 <code>Age</code> 是两个不同的变量</li>
+<li><strong>不能有空格和特殊符号</strong>（如 @ # $ % 等）</li>
+</ol>
+
+<h2>5.2 举例：哪些合法哪些不合法</h2>
+<div class="bd">
+<div class="bd-t">命名正误对照表</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:15%"><col style="width:60%"></colgroup>
+<tr><th>名字</th><th>是否合法</th><th>原因</th></tr>
+<tr><td><code>age</code></td><td style="color:green">合法</td><td>纯字母，没问题</td></tr>
+<tr><td><code>age1</code></td><td style="color:green">合法</td><td>字母+数字，且字母开头</td></tr>
+<tr><td><code>my_age</code></td><td style="color:green">合法</td><td>下划线连接，常见写法</td></tr>
+<tr><td><code>_private</code></td><td style="color:green">合法</td><td>下划线开头也可以</td></tr>
+<tr><td><code>1age</code></td><td style="color:red">不合法</td><td>不能数字开头</td></tr>
+<tr><td><code>my age</code></td><td style="color:red">不合法</td><td>不能有空格</td></tr>
+<tr><td><code>my-age</code></td><td style="color:red">不合法</td><td>减号是运算符，不能用在名字里</td></tr>
+<tr><td><code>int</code></td><td style="color:red">不合法</td><td>int 是关键字，不能用作变量名</td></tr>
+<tr><td><code>age!</code></td><td style="color:red">不合法</td><td>感叹号是特殊符号</td></tr>
+</table>
+</div>
+
+<h2>5.3 好的命名习惯</h2>
+<p>虽然规则只要求合法，但好的名字能让代码可读性大大提高：</p>
+<ul>
+<li><strong>见名知意</strong>：<code>age</code> 比 <code>a</code> 好，<code>studentName</code> 比 <code>sn</code> 好</li>
+<li><strong>用下划线分隔或驼峰命名</strong>：<code>my_age</code> 或 <code>myAge</code>，两种风格选一种保持一致</li>
+<li><strong>不要用拼音</strong>：<code>age</code> 比 <code>nianling</code> 好</li>
+<li><strong>变量名用小写</strong>：<code>studentName</code> 而不是 <code>StudentName</code>（类名才用大写开头）</li>
+<li><strong>布尔变量用 is/has 开头</strong>：<code>isPassed</code>、<code>hasLicense</code>，一看就知道是真假</li>
+</ul>
+<div class="tip"><strong>记住</strong>
+代码是写给人看的，机器只是顺便执行。好的命名能让你三个月后还看得懂自己写的代码。</div>
+
+<h2>5.4 C++ 常用关键字（不能用作变量名）</h2>
+<p>这些词已经被 C++ 占用了，不能拿来当变量名：</p>
+<p style="font-family:monospace;font-size:13px;background:#f1f5f9;padding:12px;border-radius:6px">
+int double float char bool void if else for while do switch case break continue return class struct public private protected namespace using include new delete true false this
+</p>
+${renderNav('c05')}
+`;
+
+// 06 常量
+HTML.c06=`
+<h1>06 常量与 const</h1>
+<div class="sub">一旦赋值就不能改的值</div>
+
+<h2>6.1 什么是常量？</h2>
+<p><strong>常量</strong>就是"不能改变的量"。定义好之后，程序运行期间它的值就固定了，不能再修改。</p>
+<p>为什么要用常量？比如圆周率 π = 3.14159，这个值永远不会变，你把它定义成常量，就不会不小心改到它。</p>
+
+<h2>6.2 怎么定义常量？</h2>
+<p>在数据类型前面加 <code>const</code> 关键字：</p>
+<div class="cb">
+<div class="ch"><span>const 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    const double PI = 3.14159;   // 定义常量 PI',
+'    const int MAX_AGE = 100;     // 常量通常全大写',
+'',
+'    cout &lt;&lt; "圆周率：" &lt;&lt; PI &lt;&lt; endl;',
+'    cout &lt;&lt; "最大年龄：" &lt;&lt; MAX_AGE &lt;&lt; endl;',
+'',
+'    // PI = 3.14;   // 这行会报错！常量不能修改',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="warn"><strong>注意</strong>
+如果你尝试修改 const 常量，编译器会直接报错，这其实是好事——帮你避免不小心改错值。</div>
+
+<h2>6.3 字面量</h2>
+<p>代码里直接写出来的数字、文字本身也叫"字面量"：</p>
+<div class="bd">
+<div class="bd-t">字面量类型</div>
+<table>
+<colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+<tr><th>写法</th><th>是什么类型</th></tr>
+<tr><td><code>10</code></td><td>整数（int）</td></tr>
+<tr><td><code>3.14</code></td><td>小数（double）</td></tr>
+<tr><td><code>3.14f</code></td><td>float 类型小数</td></tr>
+<tr><td><code>'A'</code></td><td>字符（char），用单引号</td></tr>
+<tr><td><code>"Hello"</code></td><td>字符串，用双引号</td></tr>
+<tr><td><code>true</code> / <code>false</code></td><td>布尔值</td></tr>
+</table>
+</div>
+<div class="tip"><strong>单引号和双引号的区别</strong>
+<code>'A'</code>（单引号）是一个字符，只能放一个字；<code>"A"</code>（双引号）是字符串，可以放多个字。新手最容易搞混。</div>
+${renderNav('c06')}
+`;
+
+// 07 输入输出
+HTML.c07=`
+<h1>07 输入输出 cin / cout</h1>
+<div class="sub">让程序和用户对话</div>
+
+<h2>7.1 cout：输出到屏幕</h2>
+<p>前面已经用过很多次了。<code>cout</code> 配合 <code>&lt;&lt;</code> 把内容输出到屏幕。可以连续用多个 <code>&lt;&lt;</code> 拼在一起。</p>
+<div class="cb">
+<div class="ch"><span>cout 用法.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int age = 18;',
+'cout &lt;&lt; "我今年" &lt;&lt; age &lt;&lt; "岁" &lt;&lt; endl;',
+'// 输出：我今年18岁',
+])}</div>
+</div>
+<p>这里的 <code>&lt;&lt;</code> 就像"传送带"，把右边的内容一个一个送出去。</p>
+
+<h2>7.2 cin：从键盘读入</h2>
+<p><code>cin</code> 是 character input 的意思，配合 <code>&gt;&gt;</code> 把用户键盘输入的内容读进变量。注意方向是 <code>&gt;&gt;</code>（两个大于号），和 cout 相反。</p>
+<div class="cb">
+<div class="ch"><span>cin 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    int age;',
+'    cout &lt;&lt; "请输入你的年龄：";  // 提示用户输入',
+'    cin &gt;&gt; age;                  // 等待用户输入，存到age里',
+'    cout &lt;&lt; "你输入的年龄是：" &lt;&lt; age &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行效果</div><div class="ob-b">请输入你的年龄：18
+你输入的年龄是：18</div></div>
+<p>程序运行到 <code>cin &gt;&gt; age;</code> 时会停下来等你输入，输入数字后按回车，程序才继续。</p>
+
+<h2>7.3 连续输入多个值</h2>
+<div class="cb">
+<div class="ch"><span>连续输入.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a, b;',
+'cout &lt;&lt; "请输入两个数字，用空格分开：";',
+'cin &gt;&gt; a &gt;&gt; b;     // 一次读两个',
+'cout &lt;&lt; "你输入的是 " &lt;&lt; a &lt;&lt; " 和 " &lt;&lt; b &lt;&lt; endl;',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行效果</div><div class="ob-b">请输入两个数字，用空格分开：3 5
+你输入的是 3 和 5</div></div>
+
+<h2>7.4 endl 和 \n 的区别</h2>
+<div class="bd">
+<div class="bd-t">换行方式对比</div>
+<table>
+<colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+<tr><th>写法</th><th>说明</th></tr>
+<tr><td><code>cout &lt;&lt; endl;</code></td><td>换行 + 刷新输出（推荐初学者用）</td></tr>
+<tr><td><code>cout &lt;&lt; "\\n";</code></td><td>只换行，不刷新（效率稍高）</td></tr>
+</table>
+</div>
+<p>新手阶段用 <code>endl</code> 就好，简单直观。</p>
+${renderNav('c07')}
+`;
+
+// 08 运算符
+HTML.c08=`
+<h1>08 运算符</h1>
+<div class="sub">让程序做计算</div>
+
+<h2>8.1 算术运算符</h2>
+<div class="bd">
+<div class="bd-t">算术运算符</div>
+<table>
+<colgroup><col style="width:15%"><col style="width:25%"><col style="width:35%"><col style="width:25%"></colgroup>
+<tr><th>符号</th><th>名字</th><th>作用</th><th>例子</th></tr>
+<tr><td><code>+</code></td><td>加法</td><td>两个数相加</td><td>3 + 5 = 8</td></tr>
+<tr><td><code>-</code></td><td>减法</td><td>两个数相减</td><td>10 - 4 = 6</td></tr>
+<tr><td><code>*</code></td><td>乘法</td><td>两个数相乘</td><td>3 * 4 = 12</td></tr>
+<tr><td><code>/</code></td><td>除法</td><td>两个数相除</td><td>10 / 2 = 5</td></tr>
+<tr><td><code>%</code></td><td>取余（取模）</td><td>求除法的余数</td><td>10 % 3 = 1</td></tr>
+</table>
+</div>
+<div class="warn"><strong>整数除法的坑</strong>
+两个整数相除，结果只保留整数部分：<code>7 / 2 = 3</code>（不是 3.5！）。如果要得到小数，至少要有一个是小数：<code>7.0 / 2 = 3.5</code>。</div>
+
+<h2>8.2 赋值运算符</h2>
+<div class="bd">
+<div class="bd-t">赋值运算符</div>
+<table>
+<colgroup><col style="width:20%"><col style="width:40%"><col style="width:40%"></colgroup>
+<tr><th>符号</th><th>例子</th><th>等价于</th></tr>
+<tr><td><code>=</code></td><td><code>a = 5</code></td><td>把 5 存到 a</td></tr>
+<tr><td><code>+=</code></td><td><code>a += 3</code></td><td>a = a + 3</td></tr>
+<tr><td><code>-=</code></td><td><code>a -= 3</code></td><td>a = a - 3</td></tr>
+<tr><td><code>*=</code></td><td><code>a *= 2</code></td><td>a = a * 2</td></tr>
+<tr><td><code>/=</code></td><td><code>a /= 2</code></td><td>a = a / 2</td></tr>
+<tr><td><code>%=</code></td><td><code>a %= 3</code></td><td>a = a % 3</td></tr>
+<tr><td><code>++</code></td><td><code>a++</code></td><td>a = a + 1（自增1）</td></tr>
+<tr><td><code>--</code></td><td><code>a--</code></td><td>a = a - 1（自减1）</td></tr>
+</table>
+</div>
+
+<h2>8.3 比较运算符</h2>
+<p>比较两个值，结果是 bool 类型（true 或 false）。</p>
+<div class="bd">
+<div class="bd-t">比较运算符</div>
+<table>
+<colgroup><col style="width:15%"><col style="width:35%"><col style="width:50%"></colgroup>
+<tr><th>符号</th><th>含义</th><th>例子</th></tr>
+<tr><td><code>==</code></td><td>等于（注意是两个等号！）</td><td>a == b</td></tr>
+<tr><td><code>!=</code></td><td>不等于</td><td>a != b</td></tr>
+<tr><td><code>&gt;</code></td><td>大于</td><td>a &gt; b</td></tr>
+<tr><td><code>&lt;</code></td><td>小于</td><td>a &lt; b</td></tr>
+<tr><td><code>&gt;=</code></td><td>大于等于</td><td>a &gt;= b</td></tr>
+<tr><td><code>&lt;=</code></td><td>小于等于</td><td>a &lt;= b</td></tr>
+</table>
+</div>
+<div class="warn"><strong>新手最常见错误</strong>
+<code>=</code>（一个等号）是<strong>赋值</strong>，把右边存到左边；<code>==</code>（两个等号）是<strong>比较</strong>，判断两边是否相等。写 <code>if (a = 5)</code> 和 <code>if (a == 5)</code> 完全不是一回事！</div>
+
+<h2>8.4 逻辑运算符</h2>
+<div class="bd">
+<div class="bd-t">逻辑运算符</div>
+<table>
+<colgroup><col style="width:15%"><col style="width:25%"><col style="width:60%"></colgroup>
+<tr><th>符号</th><th>名字</th><th>含义</th></tr>
+<tr><td><code>&amp;&amp;</code></td><td>逻辑与（并且）</td><td>两边都为 true，结果才为 true。比如：年龄&gt;18 并且 性别==男</td></tr>
+<tr><td><code>||</code></td><td>逻辑或（或者）</td><td>任意一边为 true，结果就为 true。比如：有票 或者 有邀请码</td></tr>
+<tr><td><code>!</code></td><td>逻辑非（取反）</td><td>true 变 false，false 变 true。比如：!raining 就是"没在下雨"</td></tr>
+</table>
+</div>
+
+<h2>8.5 综合示例</h2>
+<div class="cb">
+<div class="ch"><span>计算器.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    int a = 10, b = 3;',
+'    cout &lt;&lt; a &lt;&lt; " + " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a + b &lt;&lt; endl;',
+'    cout &lt;&lt; a &lt;&lt; " - " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a - b &lt;&lt; endl;',
+'    cout &lt;&lt; a &lt;&lt; " * " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a * b &lt;&lt; endl;',
+'    cout &lt;&lt; a &lt;&lt; " / " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a / b &lt;&lt; " （整数除法）" &lt;&lt; endl;',
+'    cout &lt;&lt; a &lt;&lt; " % " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a % b &lt;&lt; " （余数）" &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">10 + 3 = 13
+10 - 3 = 7
+10 * 3 = 30
+10 / 3 = 3 （整数除法）
+10 % 3 = 1 （余数）</div></div>
+${renderNav('c08')}
+`;
+
+// 09 类型转换
+HTML.c09=`
+<h1>09 类型转换</h1>
+<div class="sub">不同类型的数据怎么一起用？</div>
+
+<h2>9.1 自动类型转换</h2>
+<p>当不同类型的数据混合运算时，C++ 会自动把"小类型"转成"大类型"。规则是：<strong>小范围 → 大范围</strong>。</p>
+<p>从窄到宽的顺序：<code>char → short → int → long → float → double</code></p>
+<div class="cb">
+<div class="ch"><span>自动转换.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a = 5;',
+'double b = 2.0;',
+'// int 和 double 运算，int 自动转成 double',
+'// 结果是 double 类型：2.5',
+'cout &lt;&lt; a / b &lt;&lt; endl;  // 输出 2.5',
+])}</div>
+</div>
+
+<h2>9.2 强制类型转换</h2>
+<p>你也可以手动指定把一个类型转成另一个。写法：<code class="ic">(类型) 值</code> 或 <code class="ic">类型(值)</code></p>
+<div class="cb">
+<div class="ch"><span>强制转换.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a = 7, b = 2;',
+'',
+'// 不转换：两个 int 相除，结果是 int',
+'cout &lt;&lt; a / b &lt;&lt; endl;          // 输出 3',
+'',
+'// 强制转换：把 a 先变成 double 再除',
+'cout &lt;&lt; (double)a / b &lt;&lt; endl;   // 输出 3.5',
+'',
+'// 另一种写法',
+'cout &lt;&lt; double(a) / b &lt;&lt; endl;   // 输出 3.5',
+])}</div>
+</div>
+<div class="tip"><strong>常见用途</strong>
+算平均分的时候：<code>总分 / 人数</code> 如果两个都是 int 就会丢掉小数，所以要 <code>(double)总分 / 人数</code>。</div>
+
+<h2>9.3 转换时可能丢精度</h2>
+<div class="warn"><strong>注意</strong>
+把小数转成整数会直接砍掉小数部分（不是四舍五入！）：<code>(int)3.99</code> 结果是 <code>3</code>，不是 4。把大类型转小类型可能溢出。</div>
+${renderNav('c09')}
+`;
+
+// 10 分支
+HTML.c10=`
+<h1>10 分支结构 if / switch</h1>
+<div class="sub">让程序学会做选择</div>
+
+<h2>10.1 if 语句</h2>
+<p>如果条件成立，就执行某段代码。</p>
+<div class="cb">
+<div class="ch"><span>if 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'int main() {',
+'    int score;',
+'    cout &lt;&lt; "请输入你的分数：";',
+'    cin &gt;&gt; score;',
+'',
+'    if (score &gt;= 60) {',
+'        cout &lt;&lt; "恭喜你，及格了！" &lt;&lt; endl;',
+'    }',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<p>执行流程：如果 <code>score &gt;= 60</code> 为 true，就执行花括号里的内容；为 false 就跳过。</p>
+
+<h2>10.2 if...else</h2>
+<p>二选一：条件成立做 A，不成立做 B。</p>
+<div class="cb">
+<div class="ch"><span>if else.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'if (score &gt;= 60) {',
+'    cout &lt;&lt; "及格了" &lt;&lt; endl;',
+'} else {',
+'    cout &lt;&lt; "没及格，要加油" &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+
+<h2>10.3 if...else if...else</h2>
+<p>多条件判断，从上到下依次检查，哪个成立就执行哪个，后面的不再看。</p>
+<div class="cb">
+<div class="ch"><span>多分支.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int score;',
+'cin &gt;&gt; score;',
+'',
+'if (score &gt;= 90) {',
+'    cout &lt;&lt; "优秀" &lt;&lt; endl;',
+'} else if (score &gt;= 80) {',
+'    cout &lt;&lt; "良好" &lt;&lt; endl;',
+'} else if (score &gt;= 70) {',
+'    cout &lt;&lt; "中等" &lt;&lt; endl;',
+'} else if (score &gt;= 60) {',
+'    cout &lt;&lt; "及格" &lt;&lt; endl;',
+'} else {',
+'    cout &lt;&lt; "不及格" &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+<div class="tip"><strong>注意顺序</strong>
+判断条件要从大到小写！如果先写 <code>&gt;= 60</code>，那 90 分也会被这个条件接住，后面的就永远执行不到了。</div>
+
+<h2>10.4 switch 语句</h2>
+<p>当一个变量有多个固定值需要分别处理时，用 switch 比一堆 if...else 更清晰。</p>
+<div class="cb">
+<div class="ch"><span>switch 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int day;',
+'cin &gt;&gt; day;',
+'',
+'switch (day) {',
+'    case 1:',
+'        cout &lt;&lt; "星期一" &lt;&lt; endl;',
+'        break;     // 必须有 break！',
+'    case 2:',
+'        cout &lt;&lt; "星期二" &lt;&lt; endl;',
+'        break;',
+'    case 3:',
+'        cout &lt;&lt; "星期三" &lt;&lt; endl;',
+'        break;',
+'    default:       // 都不匹配时执行',
+'        cout &lt;&lt; "输入有误" &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+<div class="warn"><strong>break 不能忘</strong>
+每个 case 最后必须写 <code>break;</code>。如果忘了，程序会继续往下执行后面所有 case 的代码，这叫"穿透"，通常不是你想要的。</div>
+
+<h2>10.5 嵌套 if</h2>
+<p>if 里面还可以再放 if：</p>
+<div class="cb">
+<div class="ch"><span>嵌套if.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int age; bool hasTicket;',
+'cin &gt;&gt; age &gt;&gt; hasTicket;',
+'',
+'if (hasTicket) {',
+'    if (age &gt;= 18) {',
+'        cout &lt;&lt; "可以入场" &lt;&lt; endl;',
+'    } else {',
+'        cout &lt;&lt; "未成年人需家长陪同" &lt;&lt; endl;',
+'    }',
+'} else {',
+'    cout &lt;&lt; "请先买票" &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+${renderNav('c10')}
+`;
+
+// 11 循环
+HTML.c11=`
+<h1>11 循环结构</h1>
+<div class="sub">让程序重复做一件事</div>
+
+<h2>11.1 while 循环</h2>
+<p><strong>当条件成立时，反复执行花括号里的代码</strong>。就像"只要天没黑，就继续写作业"。</p>
+<div class="cb">
+<div class="ch"><span>while 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int i = 1;',
+'while (i &lt;= 5) {',
+'    cout &lt;&lt; "第" &lt;&lt; i &lt;&lt; "次循环" &lt;&lt; endl;',
+'    i++;   // 别忘了让 i 增加，否则永远停不下来！',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">第1次循环
+第2次循环
+第3次循环
+第4次循环
+第5次循环</div></div>
+<p>执行过程：检查 <code>i &lt;= 5</code> → 成立 → 执行循环体 → <code>i++</code> → 再检查条件 → ...直到条件不成立就退出。</p>
+<div class="warn"><strong>死循环</strong>
+如果忘了写 <code>i++</code>，i 永远是 1，条件永远成立，程序会无限循环下去（死机）。写 while 一定要有让条件变成 false 的步骤！</div>
+
+<h2>11.2 do...while 循环</h2>
+<p>和 while 差不多，但<strong>先执行一次再判断条件</strong>。也就是说至少会执行一次。</p>
+<div class="cb">
+<div class="ch"><span>do while.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int i = 1;',
+'do {',
+'    cout &lt;&lt; i &lt;&lt; endl;',
+'    i++;',
+'} while (i &lt;= 5);   // 注意这里有分号！',
+])}</div>
+</div>
+<p>区别：while 是"先判断再做"，do...while 是"先做再判断"。</p>
+
+<h2>11.3 for 循环</h2>
+<p>最常用的循环。适合"已知要重复多少次"的场景。把<strong>初始化、条件、更新</strong>写在一行里。</p>
+<div class="cb">
+<div class="ch"><span>for 示例.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'// 从1数到5',
+'for (int i = 1; i &lt;= 5; i++) {',
+'    cout &lt;&lt; i &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+<p>for 后面括号里分三部分，用分号隔开：</p>
+<div class="bd">
+<div class="bd-t">for 括号三部分</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+<tr><th>部分</th><th>含义</th></tr>
+<tr><td><code>int i = 1;</code></td><td>初始化：循环开始前执行一次，设置计数器</td></tr>
+<tr><td><code>i &lt;= 5;</code></td><td>条件：每次循环前检查，成立才继续</td></tr>
+<tr><td><code>i++</code></td><td>更新：每次循环结束后执行，让计数器变化</td></tr>
+</table>
+</div>
+
+<h2>11.4 break 和 continue</h2>
+<div class="bd">
+<div class="bd-t">循环控制</div>
+<table>
+<colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+<tr><th>关键字</th><th>作用</th></tr>
+<tr><td><code>break</code></td><td>立即跳出整个循环，不再继续</td></tr>
+<tr><td><code>continue</code></td><td>跳过本次循环剩下的部分，直接进入下一次</td></tr>
+</table>
+</div>
+<div class="cb">
+<div class="ch"><span>break 和 continue.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'// 遇到3就跳过',
+'for (int i = 1; i &lt;= 5; i++) {',
+'    if (i == 3) continue;   // 跳过3',
+'    cout &lt;&lt; i &lt;&lt; endl;',
+'}',
+'// 输出：1 2 4 5',
+'',
+'// 遇到3就停',
+'for (int i = 1; i &lt;= 5; i++) {',
+'    if (i == 3) break;      // 直接结束循环',
+'    cout &lt;&lt; i &lt;&lt; endl;',
+'}',
+'// 输出：1 2',
+])}</div>
+</div>
+
+<h2>11.5 三种循环怎么选？</h2>
+<ul>
+<li><strong>知道循环次数</strong>（比如数 1 到 100）→ 用 <code>for</code></li>
+<li><strong>不知道次数，但有结束条件</strong>（比如一直输入直到输入 0）→ 用 <code>while</code></li>
+<li><strong>至少要执行一次</strong>（比如菜单选项至少显示一次）→ 用 <code>do...while</code></li>
+</ul>
+${renderNav('c11')}
+`;
+
+// 12 数组
+HTML.c12=`
+<h1>12 数组</h1>
+<div class="sub">一次存一堆同类型的数据</div>
+
+<h2>12.1 为什么需要数组？</h2>
+<p>假设你要存 50 个学生的成绩。如果用普通变量，你得定义 <code>score1, score2, ..., score50</code>，太麻烦了。</p>
+<p><strong>数组</strong>就是一个连续的"盒子排"，可以一次存很多个同类型的数据。</p>
+
+<h2>12.2 怎么定义数组？</h2>
+<p>语法：<code class="ic">数据_type 数组名[长度];</code></p>
+<div class="cb">
+<div class="ch"><span>数组定义.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int scores[5];              // 定义一个能存5个int的数组',
+'int scores[5] = {90, 85, 78, 92, 88};  // 定义同时赋值',
+'// 更简单：让编译器自己数长度',
+'int scores[] = {90, 85, 78, 92, 88};   // 长度自动是5',
+])}</div>
+</div>
+
+<h2>12.3 怎么用数组？</h2>
+<p>用<strong>下标</strong>（索引）访问每个位置。<strong>注意：数组下标从 0 开始！</strong></p>
+<div class="bd">
+<div class="bd-t">数组下标对照</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+<tr><th>写法</th><th>含义</th></tr>
+<tr><td><code>scores[0]</code></td><td>第 1 个元素：90</td></tr>
+<tr><td><code>scores[1]</code></td><td>第 2 个元素：85</td></tr>
+<tr><td><code>scores[2]</code></td><td>第 3 个元素：78</td></tr>
+<tr><td><code>scores[3]</code></td><td>第 4 个元素：92</td></tr>
+<tr><td><code>scores[4]</code></td><td>第 5 个元素：88</td></tr>
+</table>
+</div>
+<div class="warn"><strong>为什么从 0 开始？</strong>
+因为下标表示的是"偏移量"——从数组开头往后数几个位置。第 1 个元素就在开头，偏移量是 0；第 2 个偏移 1 个位置。这是计算机底层决定的，记住就行。</div>
+
+<h2>12.4 遍历数组</h2>
+<p>通常用 for 循环把数组每个元素走一遍：</p>
+<div class="cb">
+<div class="ch"><span>遍历数组.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int scores[] = {90, 85, 78, 92, 88};',
+'// 数组长度是5，下标0~4',
+'for (int i = 0; i &lt; 5; i++) {',
+'    cout &lt;&lt; "第" &lt;&lt; (i+1) &lt;&lt; "个成绩：" &lt;&lt; scores[i] &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">第1个成绩：90
+第2个成绩：85
+第3个成绩：78
+第4个成绩：92
+第5个成绩：88</div></div>
+
+<h2>12.5 数组常见操作</h2>
+<div class="cb">
+<div class="ch"><span>数组操作.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int sum = 0;',
+'int max = scores[0];',
+'',
+'for (int i = 0; i &lt; 5; i++) {',
+'    sum += scores[i];        // 求和',
+'    if (scores[i] &gt; max) {   // 找最大',
+'        max = scores[i];',
+'    }',
+'}',
+'cout &lt;&lt; "总分：" &lt;&lt; sum &lt;&lt; endl;',
+'cout &lt;&lt; "平均分：" &lt;&lt; sum / 5.0 &lt;&lt; endl;',
+'cout &lt;&lt; "最高分：" &lt;&lt; max &lt;&lt; endl;',
+])}</div>
+</div>
+<div class="warn"><strong>越界访问</strong>
+数组长度是 5，下标只有 0~4。如果你写 <code>scores[5]</code> 就越界了，可能读到垃圾数据甚至导致程序崩溃。编译器不会提醒你，自己要小心！</div>
+${renderNav('c12')}
+`;
+
+// 13 函数
+HTML.c13=`
+<h1>13 函数</h1>
+<div class="sub">把重复的代码打包成一个"工具"</div>
+
+<h2>13.1 什么是函数？</h2>
+<p><strong>函数</strong>就是把一段完成特定功能的代码打包起来，起个名字，以后想用的时候直接叫名字就行，不用重复写。</p>
+<p>比如你写了一个"算两个数之和"的函数，以后任何地方要算和，直接调一下就行。</p>
+
+<h2>13.2 函数的定义</h2>
+<p>语法结构：</p>
+<div class="cb">
+<div class="ch"><span>函数结构</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'返回值类型  函数名(参数列表) {',
+'    函数体',
+'    return 返回值;',
+'}',
+])}</div>
+</div>
+<div class="bd">
+<div class="bd-t">各部分含义</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+<tr><th>部分</th><th>含义</th></tr>
+<tr><td>返回值类型</td><td>函数最后返回什么类型的数据。不需要返回就写 <code>void</code></td></tr>
+<tr><td>函数名</td><td>自己起的名字，命名规则和变量一样</td></tr>
+<tr><td>参数列表</td><td>调用函数时需要传进来的数据，可以有多个</td></tr>
+<tr><td>函数体</td><td>花括号里的实际代码</td></tr>
+<tr><td>return</td><td>把结果返回给调用者，函数结束</td></tr>
+</table>
+</div>
+
+<h2>13.3 第一个函数例子</h2>
+<div class="cb">
+<div class="ch"><span>加法函数.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'using namespace std;',
+'',
+'// 定义一个加法函数：接收两个int，返回它们的和',
+'int add(int a, int b) {',
+'    int result = a + b;',
+'    return result;   // 把结果返回',
+'}',
+'',
+'int main() {',
+'    int x = 3, y = 5;',
+'    int sum = add(x, y);   // 调用函数，把x和y传进去',
+'    cout &lt;&lt; "和是：" &lt;&lt; sum &lt;&lt; endl;',
+'    cout &lt;&lt; "10+20=" &lt;&lt; add(10, 20) &lt;&lt; endl;  // 直接调用',
+'    return 0;',
+'}',
+])}</div>
+</div>
+<div class="ob"><div class="ob-h">运行结果</div><div class="ob-b">和是：8
+10+20=30</div></div>
+
+<h2>13.4 形参和实参</h2>
+<div class="bd">
+<div class="bd-t">概念区分</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+<tr><th>名词</th><th>意思</th></tr>
+<tr><td>形参（形式参数）</td><td>函数定义时括号里的变量，比如 <code>add(int a, int b)</code> 里的 a 和 b，它们只是"占位"</td></tr>
+<tr><td>实参（实际参数）</td><td>调用函数时真正传进去的值，比如 <code>add(x, y)</code> 里的 x 和 y</td></tr>
+</table>
+</div>
+
+<h2>13.5 void 类型函数（没有返回值）</h2>
+<p>有些函数不需要返回结果，只是做一些动作，返回类型写 <code>void</code>：</p>
+<div class="cb">
+<div class="ch"><span>void 函数.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'// 打印一行星星，不需要返回值',
+'void printStars() {',
+'    for (int i = 0; i &lt; 10; i++) {',
+'        cout &lt;&lt; "*";',
+'    }',
+'    cout &lt;&lt; endl;',
+'}',
+'',
+'int main() {',
+'    printStars();   // 直接调用，不需要接收返回值',
+'    return 0;',
+'}',
+])}</div>
+</div>
+
+<h2>13.6 函数声明</h2>
+<p>C++ 要求函数<strong>先定义后使用</strong>。如果 main 函数写在前面，add 写在后面，编译器会不认识 add。解决办法是在开头先"声明"一下：</p>
+<div class="cb">
+<div class="ch"><span>函数声明.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'// 函数声明（只写开头，不写函数体）',
+'int add(int a, int b);',
+'',
+'int main() {',
+'    cout &lt;&lt; add(3, 5) &lt;&lt; endl;  // 现在可以用了',
+'    return 0;',
+'}',
+'',
+'// 函数定义（写在后面也行）',
+'int add(int a, int b) {',
+'    return a + b;',
+'}',
+])}</div>
+</div>
+${renderNav('c13')}
+`;
+
+// 14 指针
+HTML.c14=`
+<h1>14 指针入门</h1>
+<div class="sub">C++ 最核心也最抽象的概念</div>
+
+<h2>14.1 内存是什么？</h2>
+<p>你把电脑的内存想象成一排<strong>编号的小盒子</strong>，每个盒子有一个编号（地址），盒子里可以放数据。变量名就是某个盒子的"外号"。</p>
+<p>比如你定义 <code>int a = 10;</code>，电脑在内存里找了个空盒子，把 10 放进去，给这个盒子贴个标签叫 a。这个盒子有个编号（地址），比如 <code>0x00F0</code>。</p>
+
+<h2>14.2 取地址运算符 &amp;</h2>
+<p>在变量前面加 <code>&amp;</code>，可以拿到这个变量所在盒子的地址。</p>
+<div class="cb">
+<div class="ch"><span>取地址.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a = 10;',
+'cout &lt;&lt; a &lt;&lt; endl;     // 输出：10（盒子里的东西）',
+'cout &lt;&lt; &amp;a &lt;&lt; endl;   // 输出类似 0x61fe14（盒子的编号）',
+])}</div>
+</div>
+
+<h2>14.3 什么是指针？</h2>
+<p><strong>指针变量</strong>就是一个专门存"地址"的变量。它存的不是普通数据，而是另一个变量的内存地址。</p>
+<p>定义语法：<code class="ic">数据类型 *指针名;</code></p>
+<div class="cb">
+<div class="ch"><span>指针定义.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a = 10;',
+'int *p = &amp;a;   // p是一个指针，存的是a的地址',
+'// 读作：p 是一个指向 int 的指针，它指向 a',
+])}</div>
+</div>
+
+<h2>14.4 解引用运算符 *</h2>
+<p>在指针前面加 <code>*</code>，意思是"去这个地址找到里面的东西"。</p>
+<div class="cb">
+<div class="ch"><span>解引用.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'int a = 10;',
+'int *p = &amp;a;',
+'',
+'cout &lt;&lt; a &lt;&lt; endl;    // 10',
+'cout &lt;&lt; *p &lt;&lt; endl;   // 10（通过p找到a的值）',
+'',
+'*p = 20;              // 通过p修改a的值',
+'cout &lt;&lt; a &lt;&lt; endl;    // 20（a变了！）',
+])}</div>
+</div>
+<div class="tip"><strong>怎么理解？</strong>
+想象你有个抽屉（变量 a），里面放着 10 块钱。指针 p 是写着抽屉位置的小纸条。<code>&amp;a</code> 是抽屉的位置，<code>p</code> 是那张纸条，<code>*p</code> 是根据纸条找到抽屉、打开看里面的钱。</div>
+
+<h2>14.5 &amp; 和 * 在不同位置的含义</h2>
+<div class="bd">
+<div class="bd-t">符号含义对照</div>
+<table>
+<colgroup><col style="width:25%"><col style="width:75%"></colgroup>
+<tr><th>写法</th><th>含义</th></tr>
+<tr><td>定义时：<code>int *p</code></td><td>* 表示"这是一个指针"（类型的一部分）</td></tr>
+<tr><td>使用时：<code>*p</code></td><td>* 表示"取地址里的值"（解引用）</td></tr>
+<tr><td><code>&amp;a</code></td><td>&amp; 表示"取变量的地址"</td></tr>
+</table>
+</div>
+<div class="warn"><strong>新手警告</strong>
+指针是 C++ 最难的部分之一。初学者先理解"指针存的是地址"这个概念就行，不用急着深入。后面学函数传参、数组、数据结构时会反复用到，到时候自然就懂了。</div>
+${renderNav('c14')}
+`;
+
+// 15 字符串
+HTML.c15=`
+<h1>15 字符串基础</h1>
+<div class="sub">怎么处理文字？</div>
+
+<h2>15.1 两种字符串</h2>
+<p>C++ 里处理文字主要有两种方式：</p>
+<ol>
+<li><strong>char 数组</strong>（C 风格字符串）：老方法，用字符数组存，末尾要加 <code>'\\0'</code></li>
+<li><strong>string 类型</strong>（C++ 风格）：方便好用，推荐新手用</li>
+</ol>
+<p>这章我们重点学 <code>string</code>。</p>
+
+<h2>15.2 使用 string 要引入头文件</h2>
+<div class="cb">
+<div class="ch"><span>string 基础.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'#include &lt;iostream&gt;',
+'#include &lt;string&gt;       // 必须引入这个头文件',
+'using namespace std;',
+'',
+'int main() {',
+'    string name = "张三";',
+'    cout &lt;&lt; "你好，" &lt;&lt; name &lt;&lt; endl;',
+'    return 0;',
+'}',
+])}</div>
+</div>
+
+<h2>15.3 string 的常用操作</h2>
+<div class="cb">
+<div class="ch"><span>string 操作.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'string s1 = "Hello";',
+'string s2 = "World";',
+'',
+'// 拼接字符串用 +',
+'string s3 = s1 + " " + s2;',
+'cout &lt;&lt; s3 &lt;&lt; endl;       // Hello World',
+'',
+'// 长度',
+'cout &lt;&lt; s1.length() &lt;&lt; endl;  // 5',
+'',
+'// 取某个字符（下标从0开始）',
+'cout &lt;&lt; s1[0] &lt;&lt; endl;    // H',
+'',
+'// 比较字符串用 ==',
+'if (s1 == "Hello") {',
+'    cout &lt;&lt; "相等" &lt;&lt; endl;',
+'}',
+])}</div>
+</div>
+
+<h2>15.4 读取一整行</h2>
+<p>用 <code>cin &gt;&gt;</code> 读字符串遇到空格就停了。如果要读带空格的一整行，用 <code>getline</code>：</p>
+<div class="cb">
+<div class="ch"><span>getline.cpp</span><span class="lang">C++</span></div>
+<div class="cbd">${code([
+'string line;',
+'getline(cin, line);   // 读一整行（包括空格）',
+'cout &lt;&lt; line &lt;&lt; endl;',
+])}</div>
+</div>
+<div class="tip"><strong>cin 和 getline 混用注意</strong>
+如果前面用过 <code>cin &gt;&gt;</code>，再用 <code>getline</code> 可能会读到一个空行。因为 cin 输入后留下的回车键会被 getline 立即读走。新手阶段要么只用 cin，要么只用 getline，避免混用。</div>
+${renderNav('c15')}
+`;
+
+// 16 常见错误
+HTML.c16=`
+<h1>16 常见错误与调试</h1>
+<div class="sub">新手最容易踩的坑</div>
+
+<h2>16.1 编译错误</h2>
+<p>编译不通过，编译器会报错。常见原因：</p>
+<div class="bd">
+<div class="bd-t">常见编译错误</div>
+<table>
+<colgroup><col style="width:35%"><col style="width:65%"></colgroup>
+<tr><th>错误现象</th><th>原因和解决</th></tr>
+<tr><td>expected ';' before ...</td><td>某行末尾漏了分号。看报错行的上一行</td></tr>
+<tr><td>'cout' was not declared</td><td>忘了写 <code>#include &lt;iostream&gt;</code> 或 <code>using namespace std;</code></td></tr>
+<tr><td>expected '}' at end of input</td><td>花括号不配对，少了一个 <code>}</code></td></tr>
+<tr><td>missing template arguments</td><td>用了 <code>string</code> 但忘了 <code>#include &lt;string&gt;</code></td></tr>
+<tr><td>undeclared identifier</td><td>用了没定义的变量，可能是拼写错误</td></tr>
+<tr><td>expected primary-expression before ...</td><td>括号不匹配，或者多了个符号</td></tr>
+</table>
+</div>
+
+<h2>16.2 逻辑错误（能编译但结果不对）</h2>
+<ul>
+<li><strong>= 和 == 搞混</strong>：<code>if (a = 5)</code> 永远为真，应该是 <code>if (a == 5)</code></li>
+<li><strong>整数除法</strong>：<code>7 / 2</code> 得 3 不是 3.5，要用 <code>7.0 / 2</code></li>
+<li><strong>数组越界</strong>：长度为 5 的数组用了下标 5</li>
+<li><strong>循环条件写反</strong>：<code>i &lt; 5</code> 写成 <code>i &gt; 5</code>，一次都不执行</li>
+<li><strong>死循环</strong>：while 循环里忘了更新变量</li>
+<li><strong>switch 忘了 break</strong>：穿透到后面的 case</li>
+</ul>
+
+<h2>16.3 调试小技巧</h2>
+<ol>
+<li><strong>读报错信息</strong>：编译器会告诉你第几行错了，看那一行和上一行</li>
+<li><strong>加 cout 调试</strong>：在关键位置输出变量的值，看看哪里不对</li>
+<li><strong>注释法</strong>：把怀疑有问题的代码注释掉，看能不能运行</li>
+<li><strong>从简单开始</strong>：先写最简单的版本，一点点加功能</li>
+<li><strong>复制报错信息搜索</strong>：把错误信息复制到搜索引擎，几乎都能找到答案</li>
+</ol>
+
+<h2>16.4 写代码的好习惯</h2>
+<ul>
+<li>每写完一小段就编译运行，不要等全写完再编译</li>
+<li>用缩进体现代码层次（花括号里的内容缩进一级）</li>
+<li>变量名见名知意，不要用 a、b、c 随便起名</li>
+<li>适当写注释，解释"为什么"而不是"做什么"</li>
+<li>花括号对齐，方便看配对关系</li>
+</ul>
+
+<div class="tip" style="margin-top:40px">
+<strong>恭喜你！</strong>
+看到这里，你已经学完了 C++ 入门的全部核心内容。接下来就是多写代码练习——找一些简单的练习题（比如算平均数、判断闰年、九九乘法表）自己动手写，遇到问题再回来看教程。编程是练出来的，不是看出来的。加油！
+</div>
+${renderNav('c16')}
+`;
+
+// ===== 渲染主内容 =====
+function renderMain(){
+const m=document.getElementById('main');
+let html='';
+chapters.forEach(c=>{
+html+=`<div class="chapter" id="ch-${c.id}">${HTML[c.id]||''}</div>`;
+});
+m.innerHTML=html;
+}
+
+// ===== 初始化 =====
+renderSidebar();
+renderMain();
+// 恢复上次进度
+let saved='home';
+try{saved=localStorage.getItem('cpp-progress')||'home'}catch(e){}
+if(!document.getElementById('ch-'+saved)) saved='home';
+show(saved);
+// 更新首页进度
+function updateProgress(){
+try{
+const done=JSON.parse(localStorage.getItem('cpp-done')||'[]');
+const total=chapters.length-1;
+const el=document.getElementById('progressFill');
+if(el) el.style.width=(done.length/total*100)+'%';
+}catch(e){}
+}
+updateProgress();
+</script>
+</body>
+</html>
